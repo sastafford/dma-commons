@@ -6,3 +6,11 @@ target
 /old
 .idea
 *.iml
+.gradle/
+dma-commons-app/build/
+dma-commons-management/build/
+dma-commons-model/build/
+dma-commons-tracker/build/
+dma-commons-util/build/
+
+

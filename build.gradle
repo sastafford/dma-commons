@@ -1,0 +1,93 @@
+allprojects {
+    task wrapper(type: Wrapper) {
+        gradleVersion = '2.14'
+    }
+}
+
+subprojects {
+    /*
+     * Not applying the bintray plugin. Couldn't get it working properly when declared
+     * in subprojects, and when declared at root level of this script, it caused an httpcomponents
+     * classpath issue with ml-gradle in the core project. So for now, each project has to
+     * duplicate bintray publishing configuration.
+     */
+
+    apply plugin: "java"
+    apply plugin: "eclipse"
+    apply plugin: "idea"
+    apply plugin: "maven-publish"
+
+    repositories {
+        jcenter()
+        mavenLocal()
+    }
+
+    dependencies {
+        compile "org.slf4j:slf4j-api:1.7.21"
+        compile "org.apache.commons:commons-lang3:3.1"
+        testCompile "junit:junit:4+"
+    }
+
+    task sourcesJar(type: Jar, dependsOn: classes) {
+        baseName = artifactId
+        version = project.version
+        classifier = 'sources'
+        from sourceSets.main.allSource
+    }
+
+    jar {
+        baseName = artifactId
+        version = project.version
+    }
+
+    /*
+     * Assumes each project has a single publication.
+     */
+    publishing {
+        publications {
+            mainJavaWithSources(MavenPublication) {
+                groupId group
+                artifactId project.property("artifactId")
+                version project.version
+                from components.java
+                artifact sourcesJar
+            }
+        }
+    }
+
+    sourceSets.test.resources.srcDir 'src/test/java'
+}
+
+project(':dma-commons-util') {
+
+    dependencies {
+        compile "com.google.guava:guava:19.0"
+        compile project(':dma-commons-management')
+        compile "joda-time:joda-time:2.2"
+        compile "dk.dma:enav-utils:DEV"
+    }
+}
+
+project(':dma-commons-app') {
+
+    dependencies {
+        compile project(':dma-commons-util')
+        compile "com.beust:jcommander:1.30"
+        compile "com.google.inject:guice:3.0"
+    }
+}
+
+project(':dma-commons-model') {
+
+    dependencies {
+        compile "dk.dma:enav-model:DEV"
+    }
+}
+
+project(':dma-commons-tracker') {
+
+    dependencies {
+        compile "dk.dma:enav-model:DEV"
+        compile project(':dma-commons-management')
+    }
+}
