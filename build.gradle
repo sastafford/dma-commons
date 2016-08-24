@@ -64,7 +64,7 @@ project(':dma-commons-util') {
         compile "com.google.guava:guava:19.0"
         compile project(':dma-commons-management')
         compile "joda-time:joda-time:2.2"
-        compile "dk.dma:enav-utils:DEV"
+        compile "com.marklogic:enav-utils:1.0.0"
     }
 }
 
@@ -80,14 +80,14 @@ project(':dma-commons-app') {
 project(':dma-commons-model') {
 
     dependencies {
-        compile "dk.dma:enav-model:DEV"
+        compile "com.marklogic:enav-model:1.0.0"
     }
 }
 
 project(':dma-commons-tracker') {
 
     dependencies {
-        compile "dk.dma:enav-model:DEV"
+        compile "com.marklogic:enav-model:1.0.0"
         compile project(':dma-commons-management')
     }
 }
